@@ -71,3 +71,14 @@ jobs:
               repo: context.repo.repo,
               body: `🛑 Looks like you didn't create changes within the allowed location @${AUTHOR_NAME}.`
             })
+      - name: Approve on success.
+        id: approve_pr
+        uses: hmarr/auto-approve-action@v2
+        if: steps.file_check.conclusion == 'success'
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+      - name: Label Pull Request
+        uses: actions/labeler@v3
+        if: steps.file_check.conclusion == 'success'
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
